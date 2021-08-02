@@ -18,3 +18,7 @@
 2. Open app's directory in CMD or Terminal
 3. Type `npm install` or `yarn install`
 4. Add .env file at root folder project
+
+## License
+
+© [Sandi Muhamad Rizalul](https://github.com/PurpleReborn/)
