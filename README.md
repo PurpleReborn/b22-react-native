@@ -4,7 +4,8 @@
 
 <h2>Homescreen App</h2>
 
-![home](https://user-images.githubusercontent.com/79769140/127882709-50868282-24fd-42dc-b42a-20ab8d130946.jpg)
+![home (3)](https://user-images.githubusercontent.com/79769140/127883488-1d62bd37-a479-408c-a924-2c5eeb5fc840.jpg)
+
 
 
 ## Built With
