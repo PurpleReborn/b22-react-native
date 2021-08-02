@@ -4,10 +4,10 @@
 
 Coffeeshop mobile application using redux
 
-available features:
--Authentication(Sign up,Login,Edit Profile with images)
--Processing data items(Get,Get Details,Search)
--Transactions(Payments,Cart,History Payments)
+<h3>available features:</h3>
+<h4>-Authentication(Sign up,Login,Edit Profile with images)</h4>
+<h4>-Processing data items(Get,Get Details,Search)</h4>
+<h4>-Transactions(Payments,Cart,History Payments)</h4>
 
 <h2>Homescreen App</h2>
 
