@@ -8,10 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import img from '../../images/profile.png';
+// import img from '../../images/profile.png';
 import {connect} from 'react-redux';
 import {getUser} from '../redux/actions/user';
 import {authLogout} from '../redux/actions/auth';
+import {BACKEND_URL} from '@env';
+import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
 function DrawerContent({
   descriptors,
@@ -37,11 +39,21 @@ function DrawerContent({
         <TouchableOpacity
           onPress={() => navigation.navigate('profile')}
           style={drawerStyles.child}>
-          <Image source={img} style={drawerStyles.profile} />
+          {/* <Image source={img} style={drawerStyles.profile} /> */}
+          {user.details.picture !== null ? (
+            <Image
+              style={drawerStyles.profile}
+              source={{
+                uri: `${BACKEND_URL}${user.details.picture}`,
+              }}
+            />
+          ) : (
+            <Icon color="#D7DBDD" name="user-circle" size={40} />
+          )}
           {user.details.display_name === '' ? (
             <Text style={drawerStyles.name}>Your name</Text>
           ) : (
-            <Text style={drawerStyles.name}>{user.details.display_name}</Text>
+            <Text style={drawerStyles.name}>{user.details.name}</Text>
           )}
           <Text style={drawerStyles.email}>{user.details.email}</Text>
         </TouchableOpacity>

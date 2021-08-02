@@ -12,9 +12,9 @@ const ItemHistory = props => {
     <View style={styles.parentProduct}>
       <Image source={coldbrew} style={styles.productPict} />
       <View style={styles.parentInside}>
-        <Text style={styles.productName}>{props.name}</Text>
-        <Text style={styles.price2}>IDR {props.price}</Text>
-        <Text style={styles.status}>{props.address}</Text>
+        <Text style={styles.productName}>{props.code}</Text>
+        <Text style={styles.price2}>{props.payment_method}</Text>
+        <Text style={styles.status}>IDR {props.total}</Text>
       </View>
     </View>
   );
@@ -36,13 +36,13 @@ class History extends Component {
           <Text>swipe on an item to delete</Text>
         </View>
         <SwipeListView
-          data={this.props.history.history}
+          data={this.props.history.data}
           renderItem={(data, rowMap) => (
             <ItemHistory
               key={data.item.id}
-              name={data.item.name}
-              price={data.item.price}
-              // address={data.item.shipping_address}
+              code={data.item.code}
+              payment_method={data.item.payment_method}
+              total={data.item.total}
             />
           )}
           renderHiddenItem={(data, rowMap) => (
@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 15,
     paddingVertical: 10,
+    marginHorizontal: 30,
   },
   productName: {
     fontSize: 17,

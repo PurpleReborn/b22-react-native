@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import profile from '../../images/profile.png';
+// import profile from '../../images/profile.png';
 import {connect} from 'react-redux';
 import {getUser} from '../redux/actions/user';
+import Icon2 from 'react-native-vector-icons/dist/FontAwesome5';
+import {BACKEND_URL} from '@env';
 
 class Profile extends Component {
   componentDidMount() {
@@ -32,15 +34,23 @@ class Profile extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.profile}>
-            <Image
+            {/* <Image
               source={profile}
               style={styles.profilePict}
               // source={}
-            />
+            /> */}
+            {this.props.user.details.picture !== null ? (
+              <Image
+                style={styles.profilePict}
+                source={{
+                  uri: `${BACKEND_URL}${this.props.user.details.picture}`,
+                }}
+              />
+            ) : (
+              <Icon2 color="#D7DBDD" name="user-circle" size={40} />
+            )}
             <View style={styles.parentTextInfo}>
-              <Text style={styles.name}>
-                {this.props.user.details.display_name}
-              </Text>
+              <Text style={styles.name}>{this.props.user.details.name}</Text>
               <Text style={styles.subTextProfile}>
                 {this.props.user.details.email}
               </Text>

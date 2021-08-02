@@ -1,5 +1,6 @@
 const initialState = {
   details: {},
+  msg: '',
 };
 
 const user = (state = initialState, action) => {
@@ -13,7 +14,13 @@ const user = (state = initialState, action) => {
     case 'USER_UPDATE': {
       return {
         ...state,
-        details: action.payload,
+        msg: action.payload,
+      };
+    }
+    case 'USER_UPDATE_FAILED': {
+      return {
+        ...state,
+        msg: action.payload,
       };
     }
     default: {

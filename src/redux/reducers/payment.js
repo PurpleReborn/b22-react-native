@@ -1,24 +1,38 @@
 const initialState = {
-  sccMsg: '',
+  data: [],
   errMsg: '',
+  msg: '',
+  // pageInfo:[]
 };
 
 const transaction = (state = initialState, action) => {
   switch (action.type) {
+    case 'HISTORY_GET': {
+      return {
+        ...state,
+        data: action.payload,
+        // pageInfo:action.payload.pageInfo
+      };
+    }
+    case 'HISTORY_GET_FAILED': {
+      return {
+        ...state,
+        errMsg: action.payload,
+      };
+    }
     case 'CREATE_TRANSACTION': {
       return {
         ...state,
-        sccMsg: action.payload,
-        errMsg: '',
+        msg: action.payload,
       };
     }
     case 'CREATE_TRANSACTION_FAILED': {
       return {
         ...state,
         errMsg: action.payload,
-        sccMsg: '',
       };
     }
+
     default: {
       return {
         ...state,

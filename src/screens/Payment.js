@@ -6,17 +6,102 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import {Radio} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import atm from '../../images/atm.png';
+import {connect} from 'react-redux';
+import {getUser} from '../redux/actions/user';
+import {createTransaction} from '../redux/actions/payment';
 
-export default class Payment extends Component {
-  state = {
-    cheked: '',
+class Payment extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      item_id: [],
+      item_amount: 1,
+      item_additional_price: 0,
+      subTotal: '',
+      total: '',
+      payment_method: '',
+      cheked: '',
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.cart.items.length > 0) {
+      this.setData();
+    } else {
+      this.setData({
+        subTotal: 0,
+        total: 0,
+      });
+    }
+  }
+
+  setData = () => {
+    const item_id = [];
+    // const item_amount = [];
+    // const item_additional_price = [];
+    this.props.cart.items.map(element => item_id.push(element.id));
+    // this.props.cart.items.map((element) => item_amount.push(element.amount));
+    this.setState(
+      {
+        item_id: this.state.item_id.concat(item_id),
+        // item_amount: this.state.item_amount.concat(item_amount),
+      },
+      () => {
+        const subTotal = this.props.cart.items
+          .map((element, idx) => element.price * this.state.item_amount[idx])
+          .reduce((acc, curr) => acc + curr);
+        this.setState({
+          subTotal,
+          total: subTotal + subTotal * (10 / 100),
+        });
+      },
+    );
   };
+
+  createTransaction = () => {
+    const {token} = this.props.auth;
+    const {item_id, item_amount, item_additional_price, payment_method} =
+      this.state;
+    this.setState({
+      subTotal: 0,
+      total: 0,
+    });
+    this.props
+      .createTransaction(
+        item_id,
+        item_amount,
+        item_additional_price,
+        payment_method,
+        token,
+      )
+      .then(() => {
+        ToastAndroid.showWithGravity(
+          'Update success',
+          ToastAndroid.LONG,
+          ToastAndroid.CENTER,
+        );
+      })
+      .catch(err => {
+        console.log(err);
+        ToastAndroid.showWithGravity(
+          'Failed',
+          ToastAndroid.LONG,
+          ToastAndroid.CENTER,
+        );
+      });
+  };
+
+  // state = {
+  //   cheked: '',
+  // };
   render() {
+    const {items} = this.props.cart;
     return (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.parent}>
@@ -24,27 +109,29 @@ export default class Payment extends Component {
             <Text style={styles.add}>Products</Text>
           </View>
           <View style={styles.parentTopProduct}>
-            <View style={styles.parentProduct}>
-              <View style={styles.childProduct}>
-                <View style={styles.parentInside}>
-                  <Text style={styles.productName}>Hazelnut Latte</Text>
-                  <View style={styles.parentPrice}>
-                    <Text style={styles.productName}>x 1</Text>
-                    <Text style={styles.productPrice}>IDR 24.0</Text>
+            {items.map(item => (
+              <View style={styles.parentProduct}>
+                <View style={styles.childProduct}>
+                  <View style={styles.parentInside} key={item.id}>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    <View style={styles.parentPrice}>
+                      <Text style={styles.productName}>x 1</Text>
+                      <Text style={styles.productPrice}>{item.price}</Text>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
+            ))}
           </View>
           <Text style={styles.payMet}>Payment method</Text>
           <View style={styles.parentTopDeliv}>
             <View style={styles.parentDeliv}>
               <Radio.Group
                 name="radioPayment"
-                value={this.state.checked}
                 colorScheme="amber"
-                onChange={nextChecked => {
-                  this.setState({checked: nextChecked});
+                value={this.state.payment_method}
+                onChange={nextValue => {
+                  this.setState({payment_method: nextValue});
                 }}>
                 <Radio value="Card" my={1}>
                   <View style={styles.iconMet}>
@@ -78,11 +165,11 @@ export default class Payment extends Component {
           </ScrollView>
           <View style={styles.parentTotal}>
             <Text style={styles.total}>Total</Text>
-            <Text style={styles.price}>IDR 123.000</Text>
+            <Text style={styles.price}>{this.state.subTotal}</Text>
           </View>
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => this.props.navigation.navigate('history')}>
+            onPress={() => this.createTransaction()}>
             <Text style={styles.btnText}>Proceed payment</Text>
           </TouchableOpacity>
         </View>
@@ -90,6 +177,19 @@ export default class Payment extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  cart: state.cart,
+  user: state.user,
+});
+
+const mapDispatchToProps = {
+  getUser,
+  createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Payment);
 
 const styles = StyleSheet.create({
   container: {

@@ -12,42 +12,33 @@ export const getUser = token => {
   };
 };
 
-export const updateProfile = (
-  {userName, email, number, first_name, last_name, address},
-  token,
-) => {
-  // console.log(data);
-  return async dispatch => {
-    const form = new FormData();
-    form.append('userName', userName);
-    form.append('email', email);
-    form.append('number', number);
-    form.append('firstName', first_name);
-    form.append('lastName', last_name);
-    form.append('address', address);
-    // // form.append('picture', picture);
-    // form.append('picture', {
-    //   uri: picture,
-    //   name: 'test.jpg',
-    //   type: 'image/jpeg',
-    // });
-
-    // console.log(form);
-
-    try {
-      const {data} = await http(token).put(`${BACKEND_URL}/profile`, form);
-      dispatch({
-        type: 'PROFILE_UPDATE',
-        payload: data.results,
-      });
-    } catch (err) {
-      dispatch({
-        type: 'PROFILE_UPDATE_FAILED',
-        payload: err.response.data.message,
-      });
-      setTimeout(() => {
-        dispatch({type: 'PROFILE_RESET'});
-      }, 3000);
-    }
-  };
+export const updateUser = (token, Data) => async dispatch => {
+  console.log(token);
+  const form = new FormData();
+  if (Data.picture !== null) {
+    form.append('picture', {
+      uri: Data.picture.uri,
+      name: Data.picture.fileName,
+      type: Data.picture.type,
+    });
+  }
+  form.append('email', Data.email);
+  form.append('number', Data.number);
+  form.append('address', Data.address);
+  form.append('name', Data.name);
+  form.append('firstName', Data.firstName);
+  form.append('lastName', Data.lastName);
+  console.log(form);
+  try {
+    const {data} = await http(token).put(`${BACKEND_URL}/updateProfile`, form);
+    dispatch({
+      type: 'USER_UPDATE',
+      payload: data.message,
+    });
+  } catch (err) {
+    dispatch({
+      type: 'USER_UPDATE_FAILED',
+      payload: err.response.data.message,
+    });
+  }
 };
