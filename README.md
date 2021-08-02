@@ -2,7 +2,7 @@
 
 <h1 align='center'>React Native - CoffeeShop</h1>
 
-Coffeeshop mobile application using redux
+<h2>Coffeeshop mobile application using redux</h2>
 
 <h3>available features:</h3>
 <h4>-Authentication(Sign up,Login,Edit Profile with images)</h4>
