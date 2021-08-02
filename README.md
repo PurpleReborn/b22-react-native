@@ -1,6 +1,13 @@
 # b22-react-native
 
-<h1 align='center'>React Native - #nama_projek</h1>
+<h1 align='center'>React Native - CoffeeShop</h1>
+
+Coffeeshop mobile application using redux
+
+available features:
+-Authentication(Sign up,Login,Edit Profile with images)
+-Processing data items(Get,Get Details,Search)
+-Transactions(Payments,Cart,History Payments)
 
 <h2>Homescreen App</h2>
 
