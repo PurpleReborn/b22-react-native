@@ -1,6 +1,8 @@
 const itemState = {
   data: [],
   details: {},
+  search: [],
+  errMsg: '',
 };
 
 const items = (state = itemState, action) => {
@@ -8,13 +10,26 @@ const items = (state = itemState, action) => {
     case 'ITEM_GET_LIST': {
       return {
         ...state,
-        data: action.payload,
+        search: action.payload.results,
       };
     }
     case 'ITEM_GET_DETAILS': {
       return {
         ...state,
         details: action.payload,
+      };
+    }
+    case 'SEARCH': {
+      return {
+        ...state,
+        search: action.payload.results,
+        errMsg: '',
+      };
+    }
+    case 'SEARCH_FAILED': {
+      return {
+        ...state,
+        errMsg: action.payload,
       };
     }
     default: {

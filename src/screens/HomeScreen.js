@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   FlatList,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import itemsImage from '../../images/item.png';
@@ -15,9 +16,29 @@ import {connect} from 'react-redux';
 import {getItems} from '../redux/actions/items';
 
 class HomeScreen extends Component {
+  state = {
+    search: '',
+    itemSearch: [],
+  };
+
   componentDidMount() {
-    this.props.getItems();
+    const search = this.state.search;
+    this.props.getItems(search);
   }
+
+  search = () => {
+    const search = this.state.search;
+    this.props.getItems(search).then(() => {
+      this.setState({itemSearch: this.props.item.search});
+    });
+  };
+
+  handleChange = val => {
+    this.setState({
+      search: val,
+    });
+  };
+
   render() {
     return (
       <View style={styles.parent}>
@@ -29,12 +50,16 @@ class HomeScreen extends Component {
         </View>
         <Text style={styles.h1}>A good coffee is a good day</Text>
         <View>
-          <TouchableOpacity>
-            <View style={styles.search}>
-              <Icon name="search" color="#000" size={20} />
-              <Text style={styles.searchText}>Search</Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.search}>
+            <Icon name="search" color="#000" size={20} />
+            <TextInput
+              style={styles.searchText}
+              placeholder="Search"
+              onChangeText={this.handleChange}
+              onSubmitEditing={() => this.search()}
+              value={this.state.search}
+            />
+          </View>
         </View>
         <View>
           <ScrollView horizontal={true}>
@@ -58,7 +83,7 @@ class HomeScreen extends Component {
         <View>
           <ScrollView horizontal={true}>
             <FlatList
-              data={this.props.items.data}
+              data={this.props.items.search}
               horizontal
               renderItem={({item}) => (
                 <TouchableOpacity
