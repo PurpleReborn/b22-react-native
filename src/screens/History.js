@@ -1,62 +1,98 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import coldbrew from '../../images/coldbrew.png';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
-import {deleteHistory, getHistory} from '../redux/actions/history';
+import {getHistory, deleteTransaction} from '../redux/actions/payment';
+import ItemHistory from '../components/ItemHistory';
 
-const ItemHistory = props => {
-  return (
-    <View style={styles.parentProduct}>
-      <Image source={coldbrew} style={styles.productPict} />
-      <View style={styles.parentInside}>
-        <Text style={styles.productName}>{props.code}</Text>
-        <Text style={styles.price2}>{props.payment_method}</Text>
-        <Text style={styles.status}>IDR {props.total}</Text>
-      </View>
-    </View>
-  );
-};
+// const ItemHistory = props => {
+//   return (
+//     <View style={styles.parentProduct}>
+//       <Image source={coldbrew} style={styles.productPict} />
+//       <View style={styles.parentInside}>
+//         <Text style={styles.productName}>{props.code}</Text>
+//         <Text style={styles.price2}>{props.payment_method}</Text>
+//         <Text style={styles.status}>IDR {props.total}</Text>
+//       </View>
+//     </View>
+//   );
+// };
 
 class History extends Component {
   componentDidMount() {
     const {token} = this.props.auth;
+    console.log(token);
     this.props.getHistory(token);
   }
+
+  onDelete = id => {
+    const {token} = this.props.auth;
+    this.props.deleteTransaction(token, id).then(() => {
+      ToastAndroid.showWithGravity(
+        'Success deleted',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
+      return this.props.navigation.reset({
+        index: 0,
+        routes: [{name: 'history'}],
+      });
+    });
+  };
+
   render() {
     return (
       <View style={styles.parent}>
         <View style={styles.title}>
           <Text style={styles.titleCart}> History </Text>
         </View>
-        <View style={styles.title}>
-          <Icon name="swipe" size={25} color="#000" />
-          <Text>swipe on an item to delete</Text>
-        </View>
-        <SwipeListView
-          data={this.props.history.data}
-          renderItem={(data, rowMap) => (
-            <ItemHistory
-              key={data.item.id}
-              code={data.item.code}
-              payment_method={data.item.payment_method}
-              total={data.item.total}
-            />
-          )}
-          renderHiddenItem={(data, rowMap) => (
-            <View style={styles.rowBack}>
-              <TouchableOpacity
-                onPress={() => this.props.deleteHistory(data.index)}
-                style={styles.iconCenter}>
-                <Icon2 name="trash-o" size={30} />
-              </TouchableOpacity>
+
+        {this.props.transaction.data.length > 0 ? (
+          <React.Fragment>
+            <View style={styles.title}>
+              <Icon name="swipe" size={25} color="#000" />
+              <Text style={styles.swipe}>swipe on an item to delete</Text>
             </View>
-          )}
-          leftOpenValue={80}
-          rightOpenValue={10}
-        />
+            <SwipeListView
+              data={this.props.transaction.data}
+              renderItem={(data, rowMap) => (
+                <ItemHistory
+                  key={data.id}
+                  code={data.item.code}
+                  payment_method={data.item.payment_method}
+                  total={data.item.total}
+                />
+              )}
+              renderHiddenItem={(data, rowMap) => (
+                <View style={styles.rowBack}>
+                  <TouchableOpacity
+                    onPress={() => this.onDelete(data.item.id)}
+                    style={styles.iconCenter}>
+                    <Icon2 name="trash-o" size={30} />
+                  </TouchableOpacity>
+                </View>
+              )}
+              leftOpenValue={80}
+              rightOpenValue={10}
+            />
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <View style={styles.title9}>
+              <Text style={styles.swipe}>Empty History</Text>
+            </View>
+          </React.Fragment>
+        )}
       </View>
     );
   }
@@ -72,8 +108,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  title9: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   titleCart: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
   },
   img: {
@@ -98,7 +140,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   itemtext: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
+  },
+  swipe: {
+    fontFamily: 'Poppins-Regular',
   },
   price: {
     color: '#895537',
@@ -173,8 +218,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({history: state.history, auth: state.auth});
+const mapStateToProps = state => ({
+  transaction: state.transaction,
+  auth: state.auth,
+});
 
-const mapDispatchToProps = {getHistory, deleteHistory};
+const mapDispatchToProps = {getHistory, deleteTransaction};
 
 export default connect(mapStateToProps, mapDispatchToProps)(History);

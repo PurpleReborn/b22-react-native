@@ -6,6 +6,7 @@ export const getHistory = token => {
   return async dispatch => {
     try {
       const {data} = await http(token).get(`${BACKEND_URL}/history`);
+      console.log(`${BACKEND_URL}/history`);
       dispatch({
         type: 'GET_HISTORY',
         payload: data.results,

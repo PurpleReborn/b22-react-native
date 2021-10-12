@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -24,10 +24,14 @@ import Coupon from './src/screens/Coupon';
 import Delivery from './src/screens/Delivery';
 import Payment from './src/screens/Payment';
 import History from './src/screens/History';
+import Splash from './src/screens/Splash';
 
 import Cart from './src/screens/Cart';
 
 import Header from './src/components/Header';
+import Search from './src/screens/Search';
+import ChatList from './src/screens/ChatList';
+import ChatRoom from './src/screens/ChatRoom';
 
 // import Icon from 'react-native-vector-icons/FontAwesome';
 // import AntIcon from 'react-native-vector-icons/AntDesign';
@@ -45,106 +49,144 @@ const Drawer = createDrawerNavigator();
 //   }
 // }
 
-class MainStack extends Component {
-  render() {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen
-          component={HomeScreen}
-          name="home"
-          options={{
-            header: Header,
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={ProductDetails}
-          name="detail"
-          options={{
-            header: Header,
-            // cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
-          }}
-        />
+const MainStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        component={Splash}
+        name="splash"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={HomeScreen}
+        name="home"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={Search}
+        name="search"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={ProductDetails}
+        name="detail"
+        options={{
+          header: Header,
+          // cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+      />
 
-        <Stack.Screen
-          component={Favorite}
-          name="favorite"
-          options={{
-            header: Header,
-            // cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={Promo}
-          name="promo"
-          options={{
-            header: Header,
-            // cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={Coupon}
-          name="coupon"
-          options={{
-            header: Header,
-            // cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={Delivery}
-          name="delivery"
-          options={{
-            header: Header,
-            // cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={Payment}
-          name="payment"
-          options={{
-            header: Header,
-            // cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={History}
-          name="history"
-          options={{
-            header: Header,
-            // cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={Profile}
-          name="profile"
-          options={{
-            header: Header,
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          component={EditProfile}
-          name="editProfile"
-          options={{
-            header: Header,
-            headerTransparent: true,
-          }}
-        />
-      </Stack.Navigator>
-    );
-  }
-}
+      <Stack.Screen
+        component={Favorite}
+        name="favorite"
+        options={{
+          header: Header,
+          // cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={Promo}
+        name="promo"
+        options={{
+          header: Header,
+          // cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={Coupon}
+        name="coupon"
+        options={{
+          header: Header,
+          // cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={Delivery}
+        name="delivery"
+        options={{
+          header: Header,
+          // cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={Payment}
+        name="payment"
+        options={{
+          header: Header,
+          // cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={History}
+        name="history"
+        options={{
+          header: Header,
+          // cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={Profile}
+        name="profile"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={EditProfile}
+        name="editProfile"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={ChatList}
+        name="chatList"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        component={ChatRoom}
+        name="chatRoom"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const AuthStack = () => {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        component={Splash}
+        name="splash"
+        options={{
+          header: Header,
+          headerTransparent: true,
+        }}
+      />
       <Stack.Screen
         component={Welcome}
         name="welcome"
@@ -231,6 +273,11 @@ const SecurityStack = () => {
 };
 
 const App = props => {
+  useEffect(() => {
+    const init = async () => {
+      // …do multiple sync or async tasks
+    };
+  }, []);
   return (
     <NativeBaseProvider>
       <NavigationContainer>

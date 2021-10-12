@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -6,86 +6,91 @@ import {
   ImageBackground,
   TouchableOpacity,
   TextInput,
-  ToastAndroid,
+  // ToastAndroid,
 } from 'react-native';
 import bg from '../../../images/login.png';
-import {connect} from 'react-redux';
+
 import {authLogin} from '../../redux/actions/auth';
+import {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
-class Login extends Component {
-  state = {
-    email: '',
-    password: '',
+const Login = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
+
+  const formData = {
+    email: email,
+    password: password,
   };
 
-  onLogin = () => {
-    const {email, password} = this.state;
-    this.props.authLogin(email, password).then(() => {
-      if (this.props.auth.errMsg === '') {
-        ToastAndroid.showWithGravity(
-          'Login success',
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER,
-        );
-        return this.props.navigation.navigate('home');
-      } else {
-        ToastAndroid.showWithGravity(
-          `${this.props.auth.errMsg}`,
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER,
-        );
-      }
-    });
+  const onSubmit = () => {
+    dispatch(authLogin(formData, navigation));
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <ImageBackground source={bg} resizeMode="cover" style={styles.image}>
-          <View style={styles.parent}>
-            <View style={styles.parent2}>
-              <Text style={styles.text}>Login</Text>
-            </View>
-            <View style={styles.inputWrap}>
-              <TextInput
-                placeholder="Enter your email adress"
-                placeholderTextColor="white"
-                autoCompleteType="email"
-                style={styles.input}
-                value={this.state.email}
-                onChangeText={val => this.setState({email: val})}
-              />
-              <TextInput
-                placeholder="Enter your password"
-                placeholderTextColor="white"
-                autoCompleteType="password"
-                style={styles.input}
-                value={this.state.password}
-                secureTextEntry={true}
-                onChangeText={val => this.setState({password: val})}
-              />
-              <Text style={styles.forgottext}>Forgot password?</Text>
-            </View>
+  // onLogin = () => {
+  //   const {email, password} = this.state;
+  //   this.props.authLogin(email, password).then(() => {
+  //     if (this.props.auth.errMsg === '') {
+  //       ToastAndroid.showWithGravity(
+  //         'Login success',
+  //         ToastAndroid.LONG,
+  //         ToastAndroid.CENTER,
+  //       );
+  //       return this.props.navigation.navigate('home');
+  //     } else {
+  //       ToastAndroid.showWithGravity(
+  //         `${this.props.auth.errMsg}`,
+  //         ToastAndroid.LONG,
+  //         ToastAndroid.CENTER,
+  //       );
+  //     }
+  //   });
+  // };
 
-            <TouchableOpacity onPress={this.onLogin} style={styles.btn1}>
-              <Text style={styles.textbtn1}>Login</Text>
-            </TouchableOpacity>
-            <Text style={styles.or}>or login in with</Text>
-            <TouchableOpacity style={styles.btn}>
-              <Text style={styles.textbtn}>Login with Google</Text>
-            </TouchableOpacity>
+  return (
+    <View style={styles.container}>
+      <ImageBackground source={bg} resizeMode="cover" style={styles.image}>
+        <View style={styles.parent}>
+          <View style={styles.parent2}>
+            <Text style={styles.text}>Login</Text>
           </View>
-        </ImageBackground>
-      </View>
-    );
-  }
-}
-const mapStateToProps = state => ({
-  auth: state.auth,
-});
+          <View style={styles.inputWrap}>
+            <TextInput
+              placeholder="Enter your email adress"
+              placeholderTextColor="white"
+              autoCompleteType="email"
+              style={styles.input}
+              value={email}
+              onChangeText={value => setEmail(value)}
+            />
+            <TextInput
+              placeholder="Enter your password"
+              placeholderTextColor="white"
+              autoCompleteType="password"
+              style={styles.input}
+              secureTextEntry={true}
+              value={password}
+              onChangeText={value => setPassword(value)}
+            />
+            <Text style={styles.forgottext}>Forgot password?</Text>
+          </View>
 
-const mapDispatchToProps = {authLogin};
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+          <TouchableOpacity onPress={onSubmit} style={styles.btn1}>
+            <Text style={styles.textbtn1}>Login</Text>
+          </TouchableOpacity>
+          <Text style={styles.or}>or login in with</Text>
+          <TouchableOpacity style={styles.btn}>
+            <Text style={styles.textbtn}>Login with Google</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </View>
+  );
+};
+
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
@@ -98,7 +103,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 42,
     lineHeight: 56,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     paddingTop: 120,
   },
@@ -129,10 +134,11 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     fontSize: 17,
+    fontFamily: 'Poppins-Bold',
   },
   textbtn1: {
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
   },
   inputWrap: {
@@ -144,14 +150,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderBottomColor: '#fff',
     color: '#fff',
+    fontFamily: 'Poppins-Regular',
   },
   forgottext: {
     marginTop: 23,
     color: '#fff',
+    fontFamily: 'Poppins-Regular',
   },
   or: {
     color: '#fff',
     textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'Poppins-Regular',
   },
 });

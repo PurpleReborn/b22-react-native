@@ -12,7 +12,9 @@ const Header = ({navigation, scene}) => {
           name={
             scene.route.name === 'home' ||
             scene.route.name === 'welcome' ||
-            scene.route.name === 'signUp'
+            scene.route.name === 'signUp' ||
+            scene.route.name === 'splash' ||
+            scene.route.name === 'search'
               ? ''
               : 'chevron-left'
           }
@@ -25,7 +27,9 @@ const Header = ({navigation, scene}) => {
       <TouchableOpacity onPress={() => navigation.navigate('cart')}>
         <AntIcon
           name={
-            scene.route.name === 'home' || scene.route.name === 'detail'
+            scene.route.name === 'home' ||
+            scene.route.name === 'detail' ||
+            scene.route.name === 'search'
               ? 'shoppingcart'
               : ''
           }

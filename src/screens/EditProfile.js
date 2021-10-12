@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Alert,
   Text,
   View,
   StyleSheet,
@@ -15,27 +16,35 @@ import {NativeBaseProvider, Radio} from 'native-base';
 // import profile from '../../images/profile.png';
 import {getUser, updateUser} from '../redux/actions/user';
 import {connect} from 'react-redux';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {BACKEND_URL} from '@env';
+import MyButton from '../components/MyButton';
 
 class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isUpdate: false,
       email: null,
-      picture: '',
       pictureUri: '',
+      picture: null,
       number: '',
       address: '',
       name: null,
       firstName: '',
       lastName: '',
-      Update: false,
     };
   }
 
   componentDidMount() {
-    this.detailsUser();
+    const {token} = this.props.auth;
+    this.detailsUser(token);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isUpdate !== this.state.isUpdate) {
+      this.detailsUser2();
+    }
   }
 
   detailsUser = () => {
@@ -53,79 +62,192 @@ class EditProfile extends Component {
     });
   };
 
-  changeUser = () => {
-    if (this.state.picture === '') {
-      const data = {
-        email: this.state.email,
-        number: this.state.number,
-        address: this.state.address,
-        name: this.state.name,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-      };
-      const {token} = this.props.auth;
-      this.props
-        .updateUser(token, data)
-        .then(() => {
+  detailsUser2 = () => {
+    const {token} = this.props.auth;
+    this.props.getUser(token).then(() => {
+      this.setState({
+        email: this.props.user.details.email,
+        picture: this.props.user.details.picture,
+        number: this.props.user.details.number,
+        address: this.props.user.details.address,
+        name: this.props.user.details.name,
+        firstName: this.props.user.details.firstName,
+        lastName: this.props.user.details.lastName,
+      });
+    });
+  };
+
+  changeUser = e => {
+    e.preventDefault();
+    const data = {
+      picture: this.state.picture,
+      name: this.state.name,
+      address: this.state.address,
+      email: this.state.email,
+      number: this.state.number,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+    };
+    const data2 = {
+      name: this.state.name,
+      address: this.state.address,
+      email: this.state.email,
+      number: this.state.number,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+    };
+    const {token} = this.props.auth;
+    if (
+      this.state.picture === null ||
+      this.state.picture === undefined ||
+      this.state.picture === ''
+    ) {
+      if (
+        data2.name !== '' &&
+        data2.address !== '' &&
+        data2.email !== '' &&
+        data2.number !== '' &&
+        data2.firstName !== '' &&
+        data2.lastName !== '' &&
+        data2.name !== 'null' &&
+        data2.address !== 'null' &&
+        data2.email !== 'null' &&
+        data2.number !== 'null' &&
+        data2.firstName !== 'null' &&
+        data2.lastName !== 'null'
+      ) {
+        this.props.updateUser(data2, token).then(() => {
           this.setState({
-            Update: !this.state.Update,
+            isUpdate: !this.state.isUpdate,
           });
-          ToastAndroid.showWithGravity(
-            'Update success',
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER,
-          );
-        })
-        .catch(err => {
-          console.log(err);
-          ToastAndroid.showWithGravity(
-            `${this.props.auth.errMsg}`,
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER,
-          );
+          if (this.props.user.msg === 'Update SuccessFully') {
+            ToastAndroid.showWithGravity(
+              'Update success',
+              ToastAndroid.LONG,
+              ToastAndroid.CENTER,
+            );
+            // return this.props.navigation.reset({
+            //   index: 0,
+            //   routes: [{name: 'profile'}],
+            // });
+          } else {
+            ToastAndroid.showWithGravity(
+              `${this.props.user.errMsg}`,
+              ToastAndroid.LONG,
+              ToastAndroid.CENTER,
+            );
+          }
         });
+      } else {
+        ToastAndroid.showWithGravity(
+          'Form cannot be empty',
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+        );
+      }
     } else {
-      const data = {
-        email: this.state.email,
-        picture: this.state.picture,
-        number: this.state.number,
-        address: this.state.address,
-        name: this.state.name,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-      };
-      const {token} = this.props.auth;
-      this.props
-        .updateUser(token, data)
-        .then(() => {
+      if (
+        data2.name !== '' &&
+        data2.address !== '' &&
+        data2.email !== '' &&
+        data2.number !== '' &&
+        data2.firstName !== '' &&
+        data2.lastName !== '' &&
+        data2.name !== 'null' &&
+        data2.address !== 'null' &&
+        data2.email !== 'null' &&
+        data2.number !== 'null' &&
+        data2.firstName !== 'null' &&
+        data2.lastName !== 'null'
+      ) {
+        this.props.updateUser(data, token).then(() => {
           this.setState({
-            Update: !this.state.Update,
+            isUpdate: !this.state.isUpdate,
           });
-          ToastAndroid.showWithGravity(
-            'Update success',
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER,
-          );
-        })
-        .catch(err => {
-          console.log(err);
-          ToastAndroid.showWithGravity(
-            'Update failed',
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER,
-          );
+          if (this.props.user.msg === 'Update SuccessFully') {
+            ToastAndroid.showWithGravity(
+              'Update success',
+              ToastAndroid.LONG,
+              ToastAndroid.CENTER,
+            );
+          } else {
+            ToastAndroid.showWithGravity(
+              `${this.props.user.errMsg}`,
+              ToastAndroid.LONG,
+              ToastAndroid.CENTER,
+            );
+          }
         });
+      } else {
+        ToastAndroid.showWithGravity(
+          'Form cannot be empty',
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+        );
+      }
     }
   };
 
-  selectPict = e => {
+  // selectPict = e => {
+  //   if (!e.didCancel) {
+  //     this.setState({
+  //       pictureUri: e.assets[0].uri,
+  //       picture: e.assets[0],
+  //     });
+  //   }
+  // };
+
+  setPicture = () => {
+    Alert.alert('Select Picture', 'Please choose a picture', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Gallery',
+        onPress: () => launchImageLibrary({quality: 1}, this.selectPicture),
+      },
+      {
+        text: 'Camera',
+        onPress: () => launchCamera({quality: 1}, this.selectPicture),
+      },
+    ]);
+  };
+
+  selectPicture = e => {
     if (!e.didCancel) {
-      this.setState({
-        pictureUri: e.assets[0].uri,
-        picture: e.assets[0],
-      });
+      const maxSize = 1024 * 1024 * 2;
+      if (e.assets[0].fileSize < maxSize) {
+        if (
+          e.assets[0].type === 'image/jpeg' ||
+          e.assets[0].type === 'image/jpg' ||
+          e.assets[0].type === 'image/png'
+        ) {
+          this.setState({
+            pictureUri: e.assets[0].uri,
+            picture: e.assets[0],
+          });
+        } else {
+          ToastAndroid.showWithGravity(
+            'Not a picture',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+          );
+        }
+      } else {
+        ToastAndroid.showWithGravity(
+          'file To Large',
+          ToastAndroid.LONG,
+          ToastAndroid.CENTER,
+        );
+        this.setState({
+          pictureUri: '',
+          picture: null,
+        });
+      }
     }
   };
+
   render() {
     return (
       <NativeBaseProvider>
@@ -137,18 +259,7 @@ class EditProfile extends Component {
           style={styles.container}>
           <View style={styles.warpAll}>
             <View style={styles.parentPict}>
-              {this.props.user.details.picture === null ? (
-                <Image
-                  style={styles.profilePict}
-                  source={
-                    this.state.pictureUri === ''
-                      ? {
-                          uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                        }
-                      : {uri: this.state.pictureUri}
-                  }
-                />
-              ) : (
+              {this.props.user.details.picture !== null && (
                 <Image
                   style={styles.profilePict}
                   source={
@@ -162,11 +273,23 @@ class EditProfile extends Component {
                   }
                 />
               )}
+              {this.props.user.details.picture === null && (
+                <Image
+                  style={styles.profilePict}
+                  source={
+                    this.state.pictureUri === ''
+                      ? {
+                          uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                        }
+                      : {
+                          uri: this.state.pictureUri,
+                        }
+                  }
+                />
+              )}
 
               <TouchableOpacity
-                onPress={() =>
-                  launchImageLibrary({quality: 0.5}, this.selectPict)
-                }
+                onPress={this.setPicture}
                 style={styles.parentEdit}>
                 <Icon name={'pencil'} size={20} color="white" />
               </TouchableOpacity>
@@ -174,28 +297,22 @@ class EditProfile extends Component {
             <Text style={styles.inputLabel}>User Name :</Text>
             <TextInput
               value={this.state.name}
-              onChangeText={value => {
-                this.setState({name: value});
-              }}
+              onChangeText={e => this.setState({name: e})}
               style={styles.input}
             />
             <Text style={styles.inputLabel}>First Name :</Text>
             <TextInput
               value={this.state.firstName}
-              onChange={value => {
-                this.setState({firstName: value});
-              }}
+              onChangeText={e => this.setState({firstName: e})}
               style={styles.input}
             />
             <Text style={styles.inputLabel}>Last Name :</Text>
             <TextInput
               value={this.state.lastName}
-              onChange={value => {
-                this.setState({lastName: value});
-              }}
+              onChangeText={e => this.setState({lastName: e})}
               style={styles.input}
             />
-            <View>
+            {/* <View>
               <Radio.Group
                 name="radioBtn"
                 colorScheme="amber"
@@ -218,45 +335,38 @@ class EditProfile extends Component {
                   <Text style={styles.radioText}>Male</Text>
                 </Radio>
               </Radio.Group>
-            </View>
+            </View> */}
             <Text style={styles.inputLabel}>Email Adress :</Text>
             <TextInput
               value={this.state.email}
-              onChange={value => {
-                this.setState({email: value});
-              }}
+              onChangeText={e => this.setState({email: e})}
               style={styles.input}
               placeholderTextColor="black"
             />
             <Text style={styles.inputLabel}>Phone Number :</Text>
             <TextInput
               value={this.state.number}
-              onChange={value => {
-                this.setState({number: value});
-              }}
+              onChangeText={e => this.setState({number: e})}
               style={styles.input}
             />
 
-            <Text style={styles.inputLabel}>Date of Birth</Text>
+            {/* <Text style={styles.inputLabel}>Date of Birth</Text>
             <View style={styles.parentDate}>
               <TouchableOpacity>
                 <Icon style={styles.date} name={'calendar'} size={20} />
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             <Text style={styles.inputLabel}>Delivery Adress :</Text>
             <TextInput
               value={this.state.address}
-              onChange={value => {
-                this.setState({address: value});
-              }}
+              onChangeText={e => this.setState({address: e})}
               style={styles.input}
               placeholderTextColor="black"
             />
           </View>
-          <TouchableOpacity onPress={this.changeUser} style={styles.btn}>
-            <Text style={styles.btnText}>Save and Update</Text>
-          </TouchableOpacity>
+
+          <MyButton onPress={this.changeUser} name={'Save and Update'} />
         </ScrollView>
       </NativeBaseProvider>
     );
@@ -318,13 +428,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   inputLabel: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     color: '#9F9F9F',
     marginTop: 15,
   },
   input: {
     borderBottomWidth: 1,
     marginBottom: 10,
+    fontFamily: 'Poppins-Regular',
   },
   btn: {
     backgroundColor: '#6A4029',

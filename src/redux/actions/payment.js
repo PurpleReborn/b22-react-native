@@ -4,14 +4,37 @@ import {BACKEND_URL} from '@env';
 export const getHistory = token => {
   return async dispatch => {
     try {
-      const {data} = await http(token).get(`${BACKEND_URL}/history`);
+      const {data} = await http(token).get(`${BACKEND_URL}/historyTrx`);
+      console.log(`${BACKEND_URL}/historyTrx`);
       dispatch({
-        type: 'HISTORY_GET',
+        type: 'GET_HISTORY',
         payload: data.results,
       });
+      console.log(data);
     } catch (err) {
       dispatch({
         type: 'HISTORY_GET_FAILED',
+        payload: err.response.data.message,
+      });
+    }
+  };
+};
+
+export const deleteTransaction = (token, id) => {
+  console.log(token, id);
+  return async dispatch => {
+    try {
+      const {data} = await http(token).delete(
+        `${BACKEND_URL}/deleteTrxId/${id}`,
+      );
+      console.log('test');
+      dispatch({
+        type: 'DELETE_TRX',
+        payload: data.message,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'DELETE_TRX_FAILED',
         payload: err.response.data.message,
       });
     }

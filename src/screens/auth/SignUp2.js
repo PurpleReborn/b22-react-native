@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -9,84 +9,115 @@ import {
   ToastAndroid,
 } from 'react-native';
 import bg from '../../../images/signUp2.png';
-import {connect} from 'react-redux';
+import {useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {authRegister} from '../../redux/actions/auth';
 
-class SignUp2 extends Component {
-  state = {
-    email: '',
-    password: '',
-    number: '',
+const SignUp2 = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [number, setNumber] = useState('');
+
+  const dispatch = useDispatch();
+
+  const formData = {
+    email: email,
+    password: password,
+    number: number,
   };
 
-  onRegister = () => {
-    const {email, password, number} = this.state;
-    this.props.authRegister(email, password, number).then(() => {
-      if (this.props.auth.errMsg === '') {
-        ToastAndroid.showWithGravity(
-          'Success Create Account',
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER,
-        );
-        return this.props.navigation.navigate('login');
+  const onSubmit = () => {
+    if (formData.email.length > 0) {
+      if (formData.password.length >= 8) {
+        if (formData.number.length > 9) {
+          dispatch(authRegister(formData, navigation));
+        } else {
+          ToastAndroid.showWithGravity(
+            'Number Must be length more than 9 Characters',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+          );
+        }
       } else {
         ToastAndroid.showWithGravity(
-          `${this.props.auth.errMsg}`,
+          'Password Must be length more than 8 Characters',
           ToastAndroid.LONG,
-          ToastAndroid.CENTER,
+          ToastAndroid.TOP,
         );
       }
-    });
+    } else {
+      ToastAndroid.showWithGravity(
+        'Email cannot be empty',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
+    }
   };
-  render() {
-    return (
-      <View style={styles.container}>
-        <ImageBackground source={bg} resizeMode="cover" style={styles.image}>
-          <View style={styles.parent}>
-            <View style={styles.parent2}>
-              <Text style={styles.text}>Sign Up</Text>
-            </View>
-            <View style={styles.inputWrap}>
-              <TextInput
-                placeholder="Enter your email adress"
-                placeholderTextColor="white"
-                style={styles.input}
-                onChangeText={e => this.setState({email: e})}
-              />
-              <TextInput
-                placeholder="Enter your password"
-                placeholderTextColor="white"
-                style={styles.input}
-                secureTextEntry={true}
-                onChangeText={e => this.setState({password: e})}
-              />
-              <TextInput
-                placeholder="Enter your phone number"
-                placeholderTextColor="white"
-                style={styles.input}
-                onChangeText={e => this.setState({number: e})}
-              />
-            </View>
-            <TouchableOpacity onPress={this.onRegister} style={styles.btn1}>
-              <Text style={styles.textbtn1}>Create New Account</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btn}>
-              <Text style={styles.textbtn}>Create with Google</Text>
-            </TouchableOpacity>
+
+  // onRegister = () => {
+  //   const {email, password, number} = this.state;
+  //   this.props.authRegister(email, password, number).then(() => {
+  //     if (this.props.auth.errMsg === '') {
+  //       ToastAndroid.showWithGravity(
+  //         'Success Create Account',
+  //         ToastAndroid.LONG,
+  //         ToastAndroid.CENTER,
+  //       );
+  //       return this.props.navigation.navigate('login');
+  //     } else {
+  //       ToastAndroid.showWithGravity(
+  //         `${this.props.auth.errMsg}`,
+  //         ToastAndroid.LONG,
+  //         ToastAndroid.CENTER,
+  //       );
+  //     }
+  //   });
+  // };
+
+  return (
+    <View style={styles.container}>
+      <ImageBackground source={bg} resizeMode="cover" style={styles.image}>
+        <View style={styles.parent}>
+          <View style={styles.parent2}>
+            <Text style={styles.text}>Sign Up</Text>
           </View>
-        </ImageBackground>
-      </View>
-    );
-  }
-}
+          <View style={styles.inputWrap}>
+            <TextInput
+              placeholder="Enter your email adress"
+              placeholderTextColor="white"
+              style={styles.input}
+              value={email}
+              onChangeText={value => setEmail(value)}
+            />
+            <TextInput
+              placeholder="Enter your password"
+              placeholderTextColor="white"
+              style={styles.input}
+              secureTextEntry={true}
+              value={password}
+              onChangeText={value => setPassword(value)}
+            />
+            <TextInput
+              placeholder="Enter your phone number"
+              placeholderTextColor="white"
+              style={styles.input}
+              value={number}
+              onChangeText={value => setNumber(value)}
+            />
+          </View>
+          <TouchableOpacity onPress={onSubmit} style={styles.btn1}>
+            <Text style={styles.textbtn1}>Create New Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn}>
+            <Text style={styles.textbtn}>Create with Google</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </View>
+  );
+};
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-});
-
-const mapDispatchToProps = {authRegister};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp2);
+export default SignUp2;
 
 const styles = StyleSheet.create({
   container: {
@@ -99,7 +130,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 42,
     lineHeight: 56,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     paddingTop: 120,
   },
@@ -129,13 +160,13 @@ const styles = StyleSheet.create({
   textbtn: {
     color: '#000',
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
   },
   textbtn1: {
     color: '#fff',
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
   },
   inputWrap: {
@@ -147,5 +178,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderBottomColor: '#fff',
     color: '#fff',
+    fontFamily: 'Poppins-Regular',
   },
 });

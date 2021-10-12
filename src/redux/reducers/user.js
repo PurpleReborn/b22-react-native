@@ -1,6 +1,7 @@
 const initialState = {
   details: {},
   msg: '',
+  errMsg: '',
 };
 
 const user = (state = initialState, action) => {
@@ -11,7 +12,7 @@ const user = (state = initialState, action) => {
         details: action.payload,
       };
     }
-    case 'USER_UPDATE': {
+    case 'USER_UPDATE_SUCCESS': {
       return {
         ...state,
         msg: action.payload,
@@ -20,7 +21,7 @@ const user = (state = initialState, action) => {
     case 'USER_UPDATE_FAILED': {
       return {
         ...state,
-        msg: action.payload,
+        errMsg: action.payload,
       };
     }
     default: {

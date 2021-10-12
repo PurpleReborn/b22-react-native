@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleCart: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
   },
   title: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 50,
     marginHorizontal: 50,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   bgOrange: {
     backgroundColor: '#FFCB65',
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   disc: {
     textAlign: 'center',
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   code: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   btn: {
     backgroundColor: '#6A4029',

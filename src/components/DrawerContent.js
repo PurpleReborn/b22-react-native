@@ -25,6 +25,7 @@ function DrawerContent({
 }) {
   const menuItem = Object.keys(descriptors);
   const renderMenu = menuItem.map(item => descriptors[item].options.title);
+  console.log(BACKEND_URL, 'FOR GAMBAR');
 
   useEffect(() => {
     if (auth.token !== null) {
@@ -124,16 +125,18 @@ const drawerStyles = StyleSheet.create({
   },
   name: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     paddingTop: 10,
     paddingBottom: 10,
   },
   email: {
     color: '#fff',
+    fontFamily: 'Poppins-Regular',
   },
   itemText: {
     color: '#6A4029',
     fontSize: 15,
+    fontFamily: 'Poppins-Regular',
   },
   separator: {
     borderBottomWidth: 2,
@@ -152,6 +155,7 @@ const drawerStyles = StyleSheet.create({
   textSignOut: {
     color: '#6A4029',
     fontSize: 17,
+    fontFamily: 'Poppins-SemiBold',
   },
   iconWrap: {
     justifyContent: 'center',

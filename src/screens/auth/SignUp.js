@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import bg from '../../../images/signUp.png';
+import FirstButton from '../../components/FirstButton';
 
 export default class SignUp extends Component {
   render() {
@@ -25,11 +26,21 @@ export default class SignUp extends Component {
               style={styles.btn1}>
               <Text style={styles.textbtn1}>Create New Account</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => this.props.navigation.navigate('login')}
               style={styles.btn}>
               <Text style={styles.textbtn}>Get started</Text>
             </TouchableOpacity>
+            <FirstButton
+              style={{backgroundColor: '#6A4029', color: 'white'}}
+              onPress={() => this.props.navigation.navigate('signUp2')}
+              text={'Create New Account'}
+            /> */}
+            <FirstButton
+              style={{backgroundColor: '#FFBA33', color: '#000'}}
+              onPress={() => this.props.navigation.navigate('login')}
+              text={'Get started'}
+            />
           </View>
         </ImageBackground>
       </View>
@@ -48,7 +59,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 42,
     lineHeight: 56,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     paddingTop: 120,
   },
@@ -57,6 +69,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     marginHorizontal: 66,
+    fontFamily: 'Poppins-Regular',
   },
   parent: {
     flex: 1,
@@ -82,15 +95,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   textbtn: {
+    fontFamily: 'Poppins-Bold',
     color: '#000',
     textAlign: 'center',
-    fontWeight: 'bold',
     fontSize: 17,
   },
   textbtn1: {
     color: '#fff',
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
   },
 });

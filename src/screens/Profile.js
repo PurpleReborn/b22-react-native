@@ -21,6 +21,7 @@ class Profile extends Component {
   }
 
   render() {
+    console.log(BACKEND_URL, 'FOR GAMBAR');
     // const {data} = this.props.user.details;
     return (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -112,16 +113,16 @@ const styles = StyleSheet.create({
   },
   tagline: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     paddingBottom: 10,
   },
   subTagline: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   editBtn: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     color: '#6A4029',
   },
 
@@ -160,18 +161,19 @@ const styles = StyleSheet.create({
   },
   textHis: {
     paddingRight: 70,
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: 'Poppins-Bold',
   },
   name: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   subTextProfile: {
     color: '#6A4029',
     paddingTop: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#6A4029',
+    fontFamily: 'Poppins-Regular',
   },
   btn: {
     backgroundColor: '#6A4029',
@@ -184,6 +186,6 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
 });

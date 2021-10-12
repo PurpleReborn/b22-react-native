@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import {getDetails} from '../redux/actions/items';
 import {addItems} from '../redux/actions/cart';
 import {connect} from 'react-redux';
+import MyButton from '../components/MyButton';
 
 class ProductDetails extends Component {
   componentDidMount() {
@@ -35,38 +36,53 @@ class ProductDetails extends Component {
     );
   };
 
+  // harga = () => {
+  //   const details = this.props.items.details;
+  //   const final = details.description.slice(0, 200);
+  //   return final;
+  // };
+
   render() {
     const details = this.props.items.details;
     return (
       <View style={styles.parent}>
-        <View style={styles.imageWrapper}>
-          <Image style={styles.image} source={coldbrew} />
-        </View>
-
-        <View style={styles.dot}>
-          <Icon name="dot-single" size={40} color="#6A4029" />
-          <Icon name="dot-single" size={40} color="#C4C4C4" />
-          <Icon name="dot-single" size={40} color="#C4C4C4" />
-          <Icon name="dot-single" size={40} color="#C4C4C4" />
-        </View>
-
-        <View>
-          <Text style={styles.h1}>{details.name}</Text>
-          <Text style={styles.h2}>IDR.{details.price}</Text>
-        </View>
-
-        <View style={styles.paragraf1}>
-          <Text style={styles.h3}>Delivery info</Text>
-          <Text style={styles.h4}>
-            Delivered only on monday until friday from 1 pm to 7 pm
-          </Text>
-          <Text style={styles.h3}>Description</Text>
-          <Text style={styles.h4}>{details.description}</Text>
-          <View style={styles.buttonwrap}>
-            <TouchableOpacity onPress={this.funcAdd} style={styles.button}>
-              <Text style={styles.textbutton}>Add to cart</Text>
-            </TouchableOpacity>
+        <View style={styles.parent2}>
+          <View style={styles.imageWrapper}>
+            {details.picture !== null ? (
+              <Image style={styles.image} source={{uri: details.picture}} />
+            ) : (
+              <Image style={styles.image} source={coldbrew} />
+            )}
           </View>
+
+          <View style={styles.dot}>
+            <Icon name="dot-single" size={40} color="#6A4029" />
+            <Icon name="dot-single" size={40} color="#C4C4C4" />
+            <Icon name="dot-single" size={40} color="#C4C4C4" />
+            <Icon name="dot-single" size={40} color="#C4C4C4" />
+          </View>
+
+          <View>
+            <Text style={styles.h1}>{details.name}</Text>
+            <Text style={styles.h2}>IDR {details.price}</Text>
+          </View>
+
+          <View style={styles.paragraf1}>
+            <Text style={styles.h3}>Delivery info</Text>
+            <Text style={styles.h4}>
+              Delivered only on monday until friday from 1 pm to 7 pm
+            </Text>
+            <Text style={styles.h3}>Description</Text>
+            <Text style={styles.h5}>{details.description}</Text>
+            <Text style={styles.h6}>. . . . . .</Text>
+
+            {/* <TouchableOpacity onPress={this.funcAdd} style={styles.button}>
+              <Text style={styles.textbutton}>Add to cart</Text>
+            </TouchableOpacity> */}
+          </View>
+        </View>
+        <View style={styles.footer}>
+          <MyButton onPress={this.funcAdd} name={'Add to cart'} />
         </View>
       </View>
     );
@@ -77,6 +93,10 @@ const imageSize = 180;
 
 const styles = StyleSheet.create({
   parent: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  parent2: {
     flex: 1,
     backgroundColor: '#fff',
   },
@@ -99,7 +119,7 @@ const styles = StyleSheet.create({
   },
   h1: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
   },
   h2: {
@@ -115,10 +135,22 @@ const styles = StyleSheet.create({
   h3: {
     paddingTop: 20,
     fontSize: 17,
+    fontFamily: 'Poppins-Bold',
+  },
+  h4: {
+    fontFamily: 'Poppins-Regular',
+    lineHeight: 16,
+  },
+  h5: {
+    fontFamily: 'Poppins-Regular',
+    lineHeight: 16,
+    height: 80,
+  },
+  h6: {
     fontWeight: 'bold',
   },
   buttonwrap: {
-    alignItems: 'center',
+    // alignItems: 'center',
     marginTop: 20,
   },
   button: {
@@ -132,6 +164,10 @@ const styles = StyleSheet.create({
   },
   textbutton: {
     color: '#fff',
+  },
+  footer: {
+    marginHorizontal: 40,
+    marginBottom: 10,
   },
 });
 

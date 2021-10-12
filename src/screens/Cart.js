@@ -13,6 +13,8 @@ import {connect} from 'react-redux';
 import ItemCarts from '../components/ItemCarts';
 import {deleteItem} from '../redux/actions/cart';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import MyButton from '../components/MyButton';
+import coldbrew from '../../images/coldbrew.png';
 
 class Carts extends Component {
   render() {
@@ -25,13 +27,14 @@ class Carts extends Component {
           <View style={styles.warp}>
             <View style={styles.parentTag}>
               <Icon name="swipe" size={25} />
-              <Text>Swipe on an item to delete</Text>
+              <Text style={styles.swipe}>Swipe on an item to delete</Text>
             </View>
 
             <SwipeListView
               data={this.props.cart.items}
               renderItem={(data, rowMap) => (
                 <ItemCarts
+                  image={coldbrew}
                   key={data.item.id}
                   name={data.item.name}
                   price={data.item.price}
@@ -57,11 +60,10 @@ class Carts extends Component {
 
           <View style={styles.bottom}>
             {this.props.cart.items.length !== 0 ? (
-              <TouchableOpacity
-                style={styles.btn}
-                onPress={() => this.props.navigation.navigate('payment')}>
-                <Text style={styles.textbtn}>Confirm and Checkout</Text>
-              </TouchableOpacity>
+              <MyButton
+                onPress={() => this.props.navigation.navigate('payment')}
+                name={'Confirm and Checkout'}
+              />
             ) : (
               <Text style={styles.textEmpty}>Empty Cart Item</Text>
             )}
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   titleCart: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
   },
   title: {
@@ -186,5 +188,8 @@ const styles = StyleSheet.create({
   },
   textEmpty: {
     textAlign: 'center',
+  },
+  swipe: {
+    fontFamily: 'Poppins-Regular',
   },
 });

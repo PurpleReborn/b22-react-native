@@ -1,5 +1,6 @@
 const initialState = {
   data: [],
+  sccMsg: '',
   errMsg: '',
   msg: '',
   // pageInfo:[]
@@ -7,13 +8,19 @@ const initialState = {
 
 const transaction = (state = initialState, action) => {
   switch (action.type) {
-    case 'HISTORY_GET': {
+    case 'GET_HISTORY': {
       return {
         ...state,
         data: action.payload,
-        // pageInfo:action.payload.pageInfo
       };
     }
+    // case 'HISTORY_GET': {
+    //   return {
+    //     ...state,
+    //     data: action.payload,
+    //     // pageInfo:action.payload.pageInfo
+    //   };
+    // }
     case 'HISTORY_GET_FAILED': {
       return {
         ...state,
@@ -29,6 +36,20 @@ const transaction = (state = initialState, action) => {
     case 'CREATE_TRANSACTION_FAILED': {
       return {
         ...state,
+        errMsg: action.payload,
+      };
+    }
+    case 'DELETE_TRX': {
+      return {
+        ...state,
+        sccMsg: action.payload,
+        errMsg: '',
+      };
+    }
+    case 'DELETE_TRX_FAILED': {
+      return {
+        ...state,
+        sccMsg: '',
         errMsg: action.payload,
       };
     }

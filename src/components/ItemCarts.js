@@ -4,11 +4,11 @@ import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 const ItemCarts = props => {
   return (
     <View style={styles.parentProduct}>
-      <Image style={styles.productPict} source={{uri: `${props.image}`}} />
+      <Image style={styles.productPict} source={props.image} />
       <View style={styles.productChild}>
         <Text style={styles.productName}>{props.name}</Text>
         <View style={styles.parentPrice}>
-          <Text style={styles.price}>IDR.{props.price}</Text>
+          <Text style={styles.price}>IDR {props.price}</Text>
           <View style={styles.counter}>
             <TouchableOpacity onPress={props.funcMin}>
               <Text style={styles.counterChild}>-</Text>
@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 17,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textTransform: 'capitalize',
   },
   price: {
     color: '#895537',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   productChild: {
     flex: 1,

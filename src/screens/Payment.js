@@ -53,9 +53,7 @@ class Payment extends Component {
         // item_amount: this.state.item_amount.concat(item_amount),
       },
       () => {
-        const subTotal = this.props.cart.items
-          .map((element, idx) => element.price * this.state.item_amount[idx])
-          .reduce((acc, curr) => acc + curr);
+        const subTotal = this.props.cart.items.price;
         this.setState({
           subTotal,
           total: subTotal + subTotal * (10 / 100),
@@ -72,29 +70,37 @@ class Payment extends Component {
       subTotal: 0,
       total: 0,
     });
-    this.props
-      .createTransaction(
-        item_id,
-        item_amount,
-        item_additional_price,
-        payment_method,
-        token,
-      )
-      .then(() => {
-        ToastAndroid.showWithGravity(
-          'Update success',
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER,
-        );
-      })
-      .catch(err => {
-        console.log(err);
-        ToastAndroid.showWithGravity(
-          'Failed',
-          ToastAndroid.LONG,
-          ToastAndroid.CENTER,
-        );
-      });
+    if (this.state.payment_method !== '') {
+      this.props
+        .createTransaction(
+          item_id,
+          item_amount,
+          item_additional_price,
+          payment_method,
+          token,
+        )
+        .then(() => {
+          ToastAndroid.showWithGravity(
+            'Payment success',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+          );
+        })
+        .catch(err => {
+          console.log(err);
+          ToastAndroid.showWithGravity(
+            'Failed',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+          );
+        });
+    } else {
+      ToastAndroid.showWithGravity(
+        'Payment method is required',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
+    }
   };
 
   // state = {
@@ -237,24 +243,24 @@ const styles = StyleSheet.create({
   },
   deliv: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     paddingBottom: 15,
   },
   add: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 18,
   },
   payMet: {
     paddingTop: 15,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     paddingBottom: 10,
     fontSize: 18,
   },
   total: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   price: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 20,
   },
   parent: {
@@ -277,7 +283,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   input: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     borderBottomWidth: 0.5,
   },
   parentTopDeliv: {
@@ -305,14 +311,14 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   cardParent: {
     flexDirection: 'row',
   },
   textCard: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     marginTop: 15,
   },
   parentInside: {
